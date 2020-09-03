@@ -1,7 +1,8 @@
-package com.safiej.stackoverflowapplication
+package com.safiej.stackoverflowapplication.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.safiej.stackoverflowapplication.R
 
 class MainActivity : AppCompatActivity() {
 
