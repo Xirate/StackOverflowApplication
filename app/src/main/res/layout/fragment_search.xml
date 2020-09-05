@@ -30,7 +30,7 @@
         app:layout_constraintStart_toEndOf="@+id/fragment_search_logo"
         tools:text="StackOverflow" />
 
-    <TextView
+    <EditText
         android:id="@+id/fragment_search_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -51,6 +51,7 @@
         android:layout_height="0dp"
         android:background="@drawable/bg_round_grey_solid"
         android:padding="4dp"
+        android:id="@+id/fragment_search_submit"
         android:src="@drawable/ic_search"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintBottom_toBottomOf="@id/fragment_search_input"
