@@ -14,7 +14,7 @@ import com.safiej.stackoverflowapplication.data.repository.QuestionRepository
 import com.safiej.stackoverflowapplication.model.Question
 import com.safiej.stackoverflowapplication.views.adapters.SearchResultsAdapter
 
-class ResultsFragment() : Fragment() {
+class ResultsFragment : Fragment() {
 
     companion object {
 
@@ -73,6 +73,7 @@ class ResultsFragment() : Fragment() {
         val input = searchInput.text.toString()
         QuestionRepository.getQuestionsContaining(input) {
             onRequestSucceeded(it)
+            arguments?.putString(KEY_QUERY, input)
         }
     }
 
