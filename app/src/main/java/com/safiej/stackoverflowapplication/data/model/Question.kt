@@ -1,9 +1,8 @@
-package com.safiej.stackoverflowapplication.model
+package com.safiej.stackoverflowapplication.data.model
 
 import com.google.gson.annotations.SerializedName
 
 data class Question(
-
     @SerializedName("is_answered")
     val answered: Boolean,
 

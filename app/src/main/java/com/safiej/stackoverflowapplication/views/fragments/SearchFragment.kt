@@ -1,32 +1,20 @@
-package com.safiej.stackoverflowapplication.views
+package com.safiej.stackoverflowapplication.views.fragments
 
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
-import android.transition.AutoTransition
-import android.transition.Scene
-import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.safiej.stackoverflowapplication.R
-import com.safiej.stackoverflowapplication.model.Question
-import com.safiej.stackoverflowapplication.network.Rest
-import com.safiej.stackoverflowapplication.network.responses.SearchResponse
-import com.safiej.stackoverflowapplication.views.adapters.FragmentType
-import com.safiej.stackoverflowapplication.views.adapters.SearchResultsAdapter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.safiej.stackoverflowapplication.views.FragmentType
+import com.safiej.stackoverflowapplication.views.NavigationCallback
 
 class SearchFragment : Fragment() {
     companion object {
@@ -34,6 +22,8 @@ class SearchFragment : Fragment() {
             return SearchFragment()
         }
     }
+
+    private var navigationCallback: NavigationCallback? = null
 
     private lateinit var logoImage: ImageView
     private lateinit var titleTextView: TextView
@@ -57,7 +47,7 @@ class SearchFragment : Fragment() {
 
     private fun setListeners() {
         submitButton.setOnClickListener {
-            Navigator.requestNavigation(FragmentType.RESULTS, input.text.toString())
+            navigationCallback?.onNavigationRequest(FragmentType.RESULTS, input.text.toString())
         }
     }
 
@@ -67,5 +57,9 @@ class SearchFragment : Fragment() {
         spannable.append("Overflow")
         spannable.setSpan(StyleSpan(Typeface.BOLD), start, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         titleTextView.setText(spannable, TextView.BufferType.SPANNABLE)
+    }
+
+    fun setNavigationCallback(navigationCallback: NavigationCallback) {
+        this.navigationCallback = navigationCallback
     }
 }

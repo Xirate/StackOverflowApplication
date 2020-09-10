@@ -1,17 +1,20 @@
-package com.safiej.stackoverflowapplication.views
+package com.safiej.stackoverflowapplication.views.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.safiej.stackoverflowapplication.R
+import com.safiej.stackoverflowapplication.data.model.Question
 import com.safiej.stackoverflowapplication.data.repository.QuestionRepository
-import com.safiej.stackoverflowapplication.model.Question
+import com.safiej.stackoverflowapplication.views.NavigationCallback
 import com.safiej.stackoverflowapplication.views.adapters.SearchResultsAdapter
 
 class ResultsFragment : Fragment() {
@@ -29,11 +32,14 @@ class ResultsFragment : Fragment() {
         }
     }
 
+    private lateinit var navigationCallback: NavigationCallback
+
     private lateinit var searchInput: EditText
     private lateinit var searchButton: ImageView
     private lateinit var resultsList: RecyclerView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private lateinit var progressOverlay: FrameLayout
+
+    private lateinit var resultsAdapter: SearchResultsAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_results, container, false)
@@ -57,6 +63,9 @@ class ResultsFragment : Fragment() {
     private fun setupViews(query: String) {
         searchInput.setText(query, TextView.BufferType.EDITABLE)
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent)
+        resultsAdapter = SearchResultsAdapter(navigationCallback)
+        resultsList.adapter = resultsAdapter
+        resultsList.layoutManager = LinearLayoutManager(context)
     }
 
     private fun setListeners() {
@@ -82,9 +91,10 @@ class ResultsFragment : Fragment() {
             return
         }
         swipeRefreshLayout.isRefreshing = false
-        val adapter = SearchResultsAdapter()
-        adapter.setData(questionList)
-        resultsList.adapter = adapter
-        resultsList.layoutManager = LinearLayoutManager(context)
+        resultsAdapter.setData(questionList)
+    }
+
+    fun setNavigationCallback(navigationCallback: NavigationCallback) {
+        this.navigationCallback = navigationCallback
     }
 }
