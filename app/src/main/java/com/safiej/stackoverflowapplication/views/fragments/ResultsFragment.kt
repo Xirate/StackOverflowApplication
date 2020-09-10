@@ -81,16 +81,16 @@ class ResultsFragment : Fragment() {
         swipeRefreshLayout.isRefreshing = true
         val input = searchInput.text.toString()
         QuestionRepository.getQuestionsContaining(input) {
-            onRequestFinished(it)
+            onRequestSucceeded(it)
             arguments?.putString(KEY_QUERY, input)
         }
     }
 
-    private fun onRequestFinished(questionList: ArrayList<Question>?) {
-        swipeRefreshLayout.isRefreshing = false
+    private fun onRequestSucceeded(questionList: ArrayList<Question>?) {
         if (questionList == null) {
             return
         }
+        swipeRefreshLayout.isRefreshing = false
         resultsAdapter.setData(questionList)
     }
 
