@@ -1,7 +1,6 @@
 package com.safiej.stackoverflowapplication.data.repository
 
-import android.widget.Toast
-import com.safiej.stackoverflowapplication.model.Question
+import com.safiej.stackoverflowapplication.data.model.Question
 import com.safiej.stackoverflowapplication.network.Rest
 import com.safiej.stackoverflowapplication.network.responses.SearchResponse
 import retrofit2.Call

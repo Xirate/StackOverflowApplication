@@ -4,34 +4,29 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
-import androidx.viewpager2.widget.ViewPager2
-import com.safiej.stackoverflowapplication.views.adapters.MainPagerAdapter
 import com.safiej.stackoverflowapplication.R
-import com.safiej.stackoverflowapplication.views.Navigator
-import com.safiej.stackoverflowapplication.views.NavigatorInterface
-import com.safiej.stackoverflowapplication.views.ResultsFragment
-import com.safiej.stackoverflowapplication.views.SearchFragment
-import com.safiej.stackoverflowapplication.views.adapters.FragmentType
-import kotlinx.android.synthetic.main.activity_main.*
+import com.safiej.stackoverflowapplication.views.*
+import com.safiej.stackoverflowapplication.views.fragments.ResultsFragment
+import com.safiej.stackoverflowapplication.views.fragments.SearchFragment
 
-class MainActivity : FragmentActivity(), NavigatorInterface {
-
-    private val SEARCH_FRAGMENT_TAG = "SearchFragment"
+class MainActivity : FragmentActivity(), NavigationCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Navigator.navigatorInterface = this
         showFirstFragmentIfShould()
     }
 
     override fun onNavigationRequest(fragmentType: FragmentType, argument: String) {
         val fragmentManager = supportFragmentManager
         if(fragmentType == FragmentType.RESULTS) {
+            val fragment = ResultsFragment.newInstance(argument).apply {
+                setNavigationCallback(this@MainActivity)
+            }
             fragmentManager
                     .beginTransaction()
-                    .replace(R.id.fragment_container, ResultsFragment.newInstance(argument))
+                    .replace(R.id.fragment_container, fragment)
                     .commit()
         } else if (fragmentType == FragmentType.DETAILS) {
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(argument))
@@ -41,10 +36,13 @@ class MainActivity : FragmentActivity(), NavigatorInterface {
 
     private fun showFirstFragmentIfShould() {
         val fragmentManager = supportFragmentManager
+        val fragment = SearchFragment.newInstance().apply {
+            setNavigationCallback(this@MainActivity)
+        }
         if (fragmentManager.findFragmentById(R.id.fragment_container) == null) {
             fragmentManager
                     .beginTransaction()
-                    .add(R.id.fragment_container, SearchFragment.newInstance())
+                    .add(R.id.fragment_container, fragment)
                     .commit()
         }
     }
