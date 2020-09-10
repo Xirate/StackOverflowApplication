@@ -38,6 +38,7 @@ class ResultsFragment : Fragment() {
     private lateinit var searchButton: ImageView
     private lateinit var resultsList: RecyclerView
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var noResultsText: TextView
 
     private lateinit var resultsAdapter: SearchResultsAdapter
 
@@ -58,6 +59,7 @@ class ResultsFragment : Fragment() {
         searchButton = view.findViewById(R.id.fragment_results_submit)
         resultsList = view.findViewById(R.id.fragment_results_list)
         swipeRefreshLayout = view.findViewById(R.id.fragment_results_swipe_refresh)
+        noResultsText = view.findViewById(R.id.fragment_results_no_results)
     }
 
     private fun setupViews(query: String) {
@@ -81,16 +83,17 @@ class ResultsFragment : Fragment() {
         swipeRefreshLayout.isRefreshing = true
         val input = searchInput.text.toString()
         QuestionRepository.getQuestionsContaining(input) {
-            onRequestSucceeded(it)
+            onRequestFinished(it)
             arguments?.putString(KEY_QUERY, input)
         }
     }
 
-    private fun onRequestSucceeded(questionList: ArrayList<Question>?) {
+    private fun onRequestFinished(questionList: ArrayList<Question>?) {
+        swipeRefreshLayout.isRefreshing = false
+        noResultsText.visibility = if ((questionList?.size ?: 0) > 0) View.GONE else View.VISIBLE
         if (questionList == null) {
             return
         }
-        swipeRefreshLayout.isRefreshing = false
         resultsAdapter.setData(questionList)
     }
 
